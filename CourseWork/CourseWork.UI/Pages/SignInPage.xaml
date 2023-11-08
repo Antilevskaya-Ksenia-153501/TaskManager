@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:CourseWork.UI.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:DataType="models:LoginManagerViewModel"
+             x:Class="CourseWork.UI.Pages.SignInPage"
+             BindingContext="LoginManagerViewModel"
+             Title="SignInPage"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="1*, 8*, 1*">
+
+        <Ellipse Fill="#efefef"
+         WidthRequest="400"
+         HeightRequest="400"
+         HorizontalOptions="StartAndExpand"        
+         Margin="-200, 0, 0, 0"
+         Grid.Row="1"/>
+
+        <Ellipse Fill="DarkBlue"
+         WidthRequest="200"
+         HeightRequest="200"
+         Margin="-100,0,0,0"
+         HorizontalOptions="StartAndExpand"
+         Grid.Row="1"/>
+
+        <Border BackgroundColor="#efefef" Grid.Row="1" VerticalOptions="CenterAndExpand"
+            HeightRequest="450" WidthRequest="400"
+            StrokeShape="RoundRectangle 20,20,20,20">
+
+            <VerticalStackLayout Spacing="25">
+                <Label Text="SIGN IN" FontSize="26" FontAttributes="Bold" Margin="40,0,0,0"/>
+
+                <Border StrokeShape="RoundRectangle 10,10,10,10" Margin="10,0,10,0">
+                    <Grid ColumnDefinitions="35, *">
+                        <Image Source="mail.png" HeightRequest="30" WidthRequest="30" Grid.Column="0"/>
+                        <Entry Placeholder="Email" Grid.Column="1" Text="{Binding Email}"/>
+                    </Grid>
+                </Border>
+
+                <Border StrokeShape="RoundRectangle 10,10,10,10" Margin="10,0,10,0">
+                    <Grid ColumnDefinitions="35, *">
+                        <Image Source="password.png" HeightRequest="30" WidthRequest="30" Grid.Column="0">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="PasswordWatch_Tapped"/>
+                            </Image.GestureRecognizers>
+                        </Image>
+                        <Entry x:Name="passwordEntry" Placeholder="Password" Grid.Column="1" IsPassword ="True" Text="{Binding Password}"/>
+                    </Grid>
+                </Border>
+
+                <Button CornerRadius="5" HeightRequest="60" Text="SIGN IN" FontSize="20" FontAttributes="Bold"
+                        Margin="40,0,40,0" Command="{Binding LoginCommand}"/>
+                <HorizontalStackLayout Spacing="20">
+                    <Label FontAttributes="Bold" TextColor="Gray" Text="Don't have account yet?" VerticalTextAlignment="Center" Margin="60,0,0,0"/>
+                    <Label Text="SIGN UP" FontSize="18" FontAttributes="Bold" TextColor="DarkBlue"/>
+                    <HorizontalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding Source = {RelativeSource AncestorType = {x:Type models:LoginManagerViewModel} },
+                                        Path = GoToSignUpPageCommand}" CommandParameter="{Binding}"/>
+                    </HorizontalStackLayout.GestureRecognizers>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+</ContentPage>

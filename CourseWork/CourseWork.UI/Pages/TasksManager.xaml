@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:conv="clr-namespace:CourseWork.UI.ValueConverters"
+             xmlns:ent="clr-namespace:CourseWork.Domain.Entities;assembly=CourseWork.Domain"
+             xmlns:daysModel="clr-namespace:CourseWork.UI.Models"
+             xmlns:models="clr-namespace:CourseWork.UI.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:DataType="models:TasksManagerViewModel"
+             x:Class="CourseWork.UI.Pages.TasksManager"
+             Shell.NavBarHasShadow="False"
+             BindingContext="TasksManagerViewModel"
+             Shell.NavBarIsVisible="False"
+             Title="TasksManager">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior 
+            EventName="Loaded"
+            Command="{Binding UpdateMembersListCommand}"/>
+    </ContentPage.Behaviors>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <conv:RateToColorValueConverter x:Key="CompletedToColor"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid>
+        <VerticalStackLayout Padding="10,0,10,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0" Source="dashboard.png" HeightRequest="30" WidthRequest="30">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="PanelView_Tapped"/>
+                    </Image.GestureRecognizers>
+                </Image>
+                <HorizontalStackLayout Spacing = "10" Grid.Column="1" HorizontalOptions="EndAndExpand">
+                    <VerticalStackLayout VerticalOptions="Center">
+                        <Label Text="{Binding SelectedDate, StringFormat='{0:dddd}'}"/>
+                        <Label Text="{Binding SelectedDate, StringFormat='{0:MMM yyyy}'}"/>
+                    </VerticalStackLayout>
+                    <DatePicker Date ="{Binding SelectedDate}" FontAttributes="Bold" FontSize="45" Format="dd">
+                        <DatePicker.Behaviors>
+                            <toolkit:EventToCommandBehavior 
+                             EventName="DateSelected"
+                            Command="{Binding UpdateMembersListCommand}"/>
+                        </DatePicker.Behaviors>
+                    </DatePicker>
+                </HorizontalStackLayout>
+            </Grid>
+            <Label Text="Schedule" FontSize="45" HorizontalTextAlignment="End"/>
+            <Button Text="Add" HorizontalOptions="End" Command="{Binding AddTaskCommand}"/>
+            <BoxView HeightRequest="1" BackgroundColor="LightGray"/>
+            <ScrollView HeightRequest="450">
+                <CollectionView x:Name="tasksView" ItemsSource="{Binding SelectedDateTasks}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="ent:UserTask">
+                            <Grid Margin="0,5,0,5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <VerticalStackLayout Grid.Column="0" Grid.Row="0">
+                                    <Label FontAttributes="Bold" Text="{Binding StartDateTime, StringFormat='{0: HH:mm}'}"/>
+                                    <Label FontAttributes="Bold" Text="{Binding EndDateTime, StringFormat='{0: HH:mm}'}"/>
+                                </VerticalStackLayout>
+                                <Frame Grid.Column="1" Grid.Row="0" Padding="15" BackgroundColor="{Binding IsCompleted, Converter={StaticResource CompletedToColor}}">
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source = {RelativeSource AncestorType = {x:Type models:TasksManagerViewModel} },
+                                        Path = ShowDetailsCommand}" CommandParameter="{Binding}"/>
+                                    </Frame.GestureRecognizers>
+                                    <VerticalStackLayout>
+                                        <Label FontAttributes="Bold" TextDecorations="Underline" Margin="0,0,0,10" Text= "{Binding Name}"/>
+                                        <Label Margin="0,0,0,6" Text= "{Binding Description}"/>
+                                        <HorizontalStackLayout>
+                                            <Image Source="placeholder.png" HeightRequest="18" WidthRequest="18"/>
+                                            <Label Text= "{Binding Location}"/>
+                                        </HorizontalStackLayout>
+                                    </VerticalStackLayout>
+                                </Frame>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </ScrollView>
+        </VerticalStackLayout>
+        
+        <StackLayout x:Name="panelView" 
+                     HorizontalOptions="Start"
+                     WidthRequest="80"
+                     Background="#222429">
+            
+            <Image Margin ="0, 20, 0, 0" Source="dashboard.png" HeightRequest="30" WidthRequest="30">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="PanelView_Tapped"/>
+                </Image.GestureRecognizers>
+            </Image>
+
+
+            <CollectionView x:Name="weekDaysView" ItemsSource="{Binding WeekDays}" Margin="0, 20, 0, 0">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="daysModel:DaysModel">
+                        <Grid Margin="0, 5, 0, 5">
+                            <Border BackgroundColor="#454952" StrokeShape="RoundRectangle 5" HeightRequest="40" WidthRequest="40">
+                                <Label FontSize="18" Text="{Binding DayName}" VerticalTextAlignment="Center"
+                                       HorizontalTextAlignment="Center"/>
+                                <Border.Triggers>
+                                    <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="True">
+                                        <Setter Property="BackgroundColor" Value="Orange" />
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="False">
+                                        <Setter Property="BackgroundColor" Value="#454952" />
+                                    </DataTrigger>
+                                </Border.Triggers>
+                            </Border>
+                            <Border IsVisible="{Binding IsSelected}"
+                                    StrokeThickness="0"
+                                    HorizontalOptions="End"
+                                    BackgroundColor="White"
+                                    HeightRequest="25"
+                                    WidthRequest="25"
+                                    Rotation="45"
+                                    Margin="0,0,-10,0"/>
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer 
+                                    Command="{Binding Source={x:RelativeSource AncestorType={x:Type models:TasksManagerViewModel}},Path=WeekDaysSelectedCommand}" CommandParameter="{Binding}" />
+                            </Grid.GestureRecognizers>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <VerticalStackLayout HorizontalOptions="Center" Margin="0,100,0,0">
+                <toolkit:AvatarView  BorderWidth="2" ImageSource="{Binding CurrentUser.ImagePath}" x:Name="avatar" BorderColor="Orange"></toolkit:AvatarView>
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding Source = {RelativeSource AncestorType = {x:Type models:TasksManagerViewModel} },
+                                        Path = GoToUserPageCommand}" CommandParameter="{Binding}">
+                    </TapGestureRecognizer>
+                </VerticalStackLayout.GestureRecognizers>
+            </VerticalStackLayout>
+            
+            <Image Margin ="0, 0, 0, 10" Source="exit.png" HeightRequest="40" WidthRequest="40" VerticalOptions="EndAndExpand">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Exit_Tapped"/>
+                </Image.GestureRecognizers>
+            </Image>
+        </StackLayout>
+    </Grid>
+</ContentPage>

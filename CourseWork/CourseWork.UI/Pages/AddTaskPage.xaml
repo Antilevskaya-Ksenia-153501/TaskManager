@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CourseWork.UI.Pages.AddTaskPage"
+             Shell.FlyoutBehavior="Disabled"
+             Shell.NavBarIsVisible="False"
+             Title="AddTaskPage">
+    
+    <VerticalStackLayout Spacing="15">
+        <VerticalStackLayout>
+            <Border StrokeShape="RoundRectangle 5" Margin="10,20,10,0">
+                <Entry x:Name="titleEntry" Placeholder="Title"/>
+            </Border>
+            <Label Text="Enter the title" Margin="25,0,25,0" FontSize="12" FontAttributes="Bold"/>
+        </VerticalStackLayout>
+
+        <VerticalStackLayout>
+            <Border StrokeShape="RoundRectangle 5" Margin="10,0,10,0">
+                <Entry x:Name="descriptionEntry" Placeholder="Description"/>
+            </Border>
+            <Label Text="Enter the description" Margin="25,0,25,0" FontSize="12" FontAttributes="Bold"/>
+        </VerticalStackLayout>
+
+        <VerticalStackLayout>
+            <Border StrokeShape="RoundRectangle 5" Margin="10,0,10,0">
+                <Entry x:Name="locationEntry" Placeholder="Location"/>
+            </Border>
+            <Label Text="Enter the location" Margin="25,0,25,0" FontSize="12" FontAttributes="Bold"/>
+        </VerticalStackLayout>
+
+        <VerticalStackLayout>
+            <TimePicker x:Name="startTimePicker" Margin="10,0,10,0"/>
+            <Label Text="Enter the StartTime" Margin="25,0,25,0" FontSize="12" FontAttributes="Bold"/>
+        </VerticalStackLayout>
+
+        <VerticalStackLayout>
+            <TimePicker x:Name="endTimePicker" Margin="10,0,10,0"/>
+            <Label Text="Enter the EndTime" Margin="25,0,25,0" FontSize="12" FontAttributes="Bold"/>
+        </VerticalStackLayout>
+
+        <Button Text="Add task" Clicked="OnAddClicked" HorizontalOptions="Start" Margin="10,0,10,0"/>
+    </VerticalStackLayout>
+</ContentPage>

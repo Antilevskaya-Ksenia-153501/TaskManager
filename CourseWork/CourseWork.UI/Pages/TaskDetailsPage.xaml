@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CourseWork.UI.Pages.TaskDetailsPage"
+             Loaded="onLoaded"
+             Shell.FlyoutBehavior="Disabled"
+             Shell.NavBarIsVisible="False"
+             Title="TaskDetailsPage">
+
+    <VerticalStackLayout>
+        <Label x:Name="nameLabel" FontSize="16"/>
+        <Label x:Name="descriptionLabel" FontSize="16"/>
+        <Label x:Name="locationLabel" FontSize="16"/>
+        <HorizontalStackLayout>
+            <Label Text="IsCompleted" Margin="0,10,0,0" FontSize="16"/>
+            <CheckBox x:Name="checkBox"/>
+        </HorizontalStackLayout>
+        <HorizontalStackLayout>
+            <Button Text="Edit" Command="{Binding EditTaskCommand}"/>
+            <Button Text="Delete" Clicked="OnDeleteClicked"/>
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+</ContentPage>
